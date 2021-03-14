@@ -16,15 +16,15 @@
 
 package org.springframework.boot.autoconfigure;
 
+import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.util.StringUtils;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Set;
-
-import org.springframework.core.io.UrlResource;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
-import org.springframework.util.StringUtils;
 
 /**
  * Internal utility used to load {@link AutoConfigurationMetadata}.
@@ -32,7 +32,7 @@ import org.springframework.util.StringUtils;
  * @author Phillip Webb
  */
 final class AutoConfigurationMetadataLoader {
-
+	// 文件中的内容为需要加载的配置类的类路径
 	protected static final String PATH = "META-INF/spring-autoconfigure-metadata.properties";
 
 	private AutoConfigurationMetadataLoader() {
