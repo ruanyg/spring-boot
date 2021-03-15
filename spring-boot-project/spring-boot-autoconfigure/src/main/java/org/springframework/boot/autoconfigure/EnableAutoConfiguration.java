@@ -74,8 +74,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@AutoConfigurationPackage // 自动配置包
-@Import(AutoConfigurationImportSelector.class) // 自动配置类扫描导入
+@AutoConfigurationPackage // 自动配置包：会把@SpringBootApplication注解标注的类所在包名拿到，并且对该包及其子包进行扫描，将组件添加到容器中
+@Import(AutoConfigurationImportSelector.class) // 可以帮助springboot应用将所有符合条件的@Configuration配置都加载到当前SpringBoot创建并使用的IoC容器中
 public @interface EnableAutoConfiguration {
 
 	String ENABLED_OVERRIDE_PROPERTY = "spring.boot.enableautoconfiguration";

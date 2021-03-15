@@ -44,12 +44,20 @@ final class AutoConfigurationMetadataLoader {
 
 	static AutoConfigurationMetadata loadMetadata(ClassLoader classLoader, String path) {
 		try {
+			// 1.读取spring-boot-autoconfigure.jar包中spring-autoconfigure-metadata.properties的信息生成urls枚举对象
+			// 获得 PATH 对应的 URL 们
 			Enumeration<URL> urls = (classLoader != null) ? classLoader.getResources(path)
 					: ClassLoader.getSystemResources(path);
+			// 遍历 URL 数组，读取到 properties 中
 			Properties properties = new Properties();
+
+			// 2.解析urls枚举对象中的信息封装成properties对象并加载
 			while (urls.hasMoreElements()) {
 				properties.putAll(PropertiesLoaderUtils.loadProperties(new UrlResource(urls.nextElement())));
 			}
+
+			// 将 properties 转换成 PropertiesAutoConfigurationMetadata 对象
+			// 根据封装好的properties对象生成AutoConfigurationMetadata对象返回
 			return loadMetadata(properties);
 		}
 		catch (IOException ex) {

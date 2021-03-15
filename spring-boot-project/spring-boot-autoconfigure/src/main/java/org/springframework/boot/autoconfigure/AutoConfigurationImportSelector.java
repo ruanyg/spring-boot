@@ -76,10 +76,14 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 
 	@Override
 	public String[] selectImports(AnnotationMetadata annotationMetadata) {
+		// 判断@EnableAutoConfiguration注解有没有开启，默认开启（是否进行自动装配）
 		if (!isEnabled(annotationMetadata)) {
 			return NO_IMPORTS;
 		}
-		// 获得自动配置元数据，需要传入beanClassLoader这个类加载器
+		// 1. 加载配置文件META-INF/spring-autoconfigure-metadata.properties，从中获取所有支持自动配置类的条件
+		// 作用：SpringBoot使用一个Annotation的处理器来收集一些自动装配的条件，那么这些条件可以在META-INF/spring-autoconfigure-metadata.properties进行配置。
+		// SpringBoot会将收集好的@Configuration进行一次过滤进而剔除不满足条件的配置类
+		// 自动配置的类全名.条件=值
 		AutoConfigurationMetadata autoConfigurationMetadata = AutoConfigurationMetadataLoader
 				.loadMetadata(this.beanClassLoader);
 		AutoConfigurationEntry autoConfigurationEntry = getAutoConfigurationEntry(autoConfigurationMetadata,
