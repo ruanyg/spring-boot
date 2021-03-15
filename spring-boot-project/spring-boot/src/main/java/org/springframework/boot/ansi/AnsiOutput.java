@@ -16,9 +16,9 @@
 
 package org.springframework.boot.ansi;
 
-import java.util.Locale;
-
 import org.springframework.util.Assert;
+
+import java.util.Locale;
 
 /**
  * Generates ANSI encoded output, automatically attempting to detect if the terminal
@@ -169,17 +169,25 @@ public abstract class AnsiOutput {
 	public enum Enabled {
 
 		/**
+         * 自动探测，根据是否支持 ANSI 的功能，来判断是否要彩色输出
+         *
+         * 【默认值】
+         *
 		 * Try to detect whether ANSI coloring capabilities are available. The default
 		 * value for {@link AnsiOutput}.
 		 */
 		DETECT,
 
 		/**
+         * 总是开启 ANSI 彩色输出
+         *
 		 * Enable ANSI-colored output.
 		 */
 		ALWAYS,
 
 		/**
+         * 禁用 ANSI 彩色输出
+         *
 		 * Disable ANSI-colored output.
 		 */
 		NEVER

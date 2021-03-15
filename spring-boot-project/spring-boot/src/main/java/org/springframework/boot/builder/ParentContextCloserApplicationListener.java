@@ -16,8 +16,6 @@
 
 package org.springframework.boot.builder;
 
-import java.lang.ref.WeakReference;
-
 import org.springframework.beans.BeansException;
 import org.springframework.boot.builder.ParentContextApplicationContextInitializer.ParentContextAvailableEvent;
 import org.springframework.context.ApplicationContext;
@@ -27,6 +25,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.core.Ordered;
 import org.springframework.util.ObjectUtils;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Listener that closes the application context if its parent is closed. It listens for
@@ -40,6 +40,9 @@ import org.springframework.util.ObjectUtils;
 public class ParentContextCloserApplicationListener
 		implements ApplicationListener<ParentContextAvailableEvent>, ApplicationContextAware, Ordered {
 
+    /**
+     * 顺序
+     */
 	private int order = Ordered.LOWEST_PRECEDENCE - 10;
 
 	private ApplicationContext context;
@@ -60,7 +63,9 @@ public class ParentContextCloserApplicationListener
 	}
 
 	private void maybeInstallListenerInParent(ConfigurableApplicationContext child) {
+		// 如果 child 是当前容器，并且父容器是 ConfigurableApplicationContext 类型
 		if (child == this.context && child.getParent() instanceof ConfigurableApplicationContext) {
+			// 向父容器添加监听器，监听父容器的关闭事件
 			ConfigurableApplicationContext parent = (ConfigurableApplicationContext) child.getParent();
 			parent.addApplicationListener(createContextCloserListener(child));
 		}
@@ -90,7 +95,10 @@ public class ParentContextCloserApplicationListener
 		@Override
 		public void onApplicationEvent(ContextClosedEvent event) {
 			ConfigurableApplicationContext context = this.childContext.get();
-			if ((context != null) && (event.getApplicationContext() == context.getParent()) && context.isActive()) {
+			if ((context != null)
+					&& (event.getApplicationContext() == context.getParent()) // 如果是父容器
+					&& context.isActive()) { // 并且当前容器是启动状态
+				// 关闭当前容器
 				context.close();
 			}
 		}
